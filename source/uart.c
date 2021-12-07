@@ -20,6 +20,8 @@
 #define PARITY_ENABLE			(0)		//Parity disabled ('1' parity enabled)
 #define PARITY_TYPE				(0)		//('0'-Even parity/ '1'- Odd parity)
 
+
+int uart_rx=0;
 //create two buffer, one for Tx and one for Rx
 cbuffer TxBuff, RxBuff;
 
@@ -90,7 +92,7 @@ void UART0_IRQHandler(void)
 
 	//Rx interrupt check
 	if (UART0->S1 & UART0_S1_RDRF_MASK){
-
+		uart_rx=1;
 		user_input = UART0->D;         				//reading data register for user input
 		if (!(IsBuffFull(&RxBuff))) {				//If Rx buffer is not full enqueues to Rx buffer
 
@@ -143,3 +145,21 @@ int __sys_readc(void)
 	return cbuffer_dequeue(&RxBuff);	  //return the user input
 }
 
+int uart_input(void)
+{
+	if(uart_rx){
+		uart_rx=0;
+		return 1;
+	}else
+	return 0;
+}
+
+void disable_uart(void)
+{
+	UART0->C2 &= (~UART0_C2_RE_MASK);
+}
+
+void enable_uart(void)
+{
+	UART0->C2 |=(UART0_C2_RE_MASK);
+}

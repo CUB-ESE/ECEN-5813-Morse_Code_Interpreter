@@ -43,4 +43,8 @@ int button_status(void);
 
 void button_StatusReset(int);
 
+void disable_gpio(void);
+
+void enable_gpio(void);
+
 #endif /* GPIO_H_ */

@@ -30,5 +30,11 @@ extern cbuffer TxBuff, RxBuff;
  */
 void InitUart(void);
 
+int uart_input(void);
+
+void disable_uart(void);
+
+void enable_uart(void);
+
 
 #endif /* UART_H_ */

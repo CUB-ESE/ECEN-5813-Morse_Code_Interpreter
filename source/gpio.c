@@ -51,3 +51,14 @@ void button_StatusReset(int input)
 {
 	buttonStatus = input;
 }
+
+
+void disable_gpio(void)
+{
+	PORTD->PCR[6] &= ~PORT_PCR_ISF_MASK;
+}
+
+void enable_gpio(void)
+{
+	PORTD->PCR[6] |=PORT_PCR_ISF_MASK;
+}
