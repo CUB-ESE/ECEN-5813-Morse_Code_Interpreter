@@ -3,16 +3,8 @@
  * @file    MorseCodeInterpreter.c
  * @brief   Application entry point.
  */
-#include <stdio.h>
-#include <string.h>
-#include "board.h"
-#include "peripherals.h"
-#include "pin_mux.h"
-#include "clock_config.h"
-#include "MKL25Z4.h"
-#include "fsl_debug_console.h"
 
-
+#include "MorseCodeInterpreter.h"
 #include "cbuffer.h"
 #include "uart.h"
 #include "gpio.h"
@@ -29,8 +21,8 @@
 cbuffer mcode;
 
 typedef struct{
-	const char *Mcode;
-	const char character;
+	char *Mcode;
+	char character;
 }Mcode;
 
 
@@ -42,24 +34,26 @@ static Mcode MorseCode[]={
 		{"DDDDD\n",'0'}
 };
 
-const int NCodes = 36;
+const int NCodes = sizeof(MorseCode)/sizeof(MorseCode[0]);
 
 void delay(void){
 	int t = now();
 	while((now()-t)<2);
 }
 
-void CharToMcode(void)
+char* CharToMcode(char data)
 {
 	//NVIC_DisableIRQ(UART0_IRQn);
 
-	uint8_t data,CnvFlag;
+	uint8_t CnvFlag;
+	char *output;
 	CnvFlag=1;
-	data = cbuffer_dequeue(&mcode);
-	while(data!='|'){
+	//data = cbuffer_dequeue(&mcode);
+	//while(data!='|'){
 
 		for(int i=0;i<NCodes;i++){
 			if(data == MorseCode[i].character){
+				output=MorseCode[i].Mcode;
 				for(int j=0;MorseCode[i].Mcode[j] != '\n';j++){
 					if(MorseCode[i].Mcode[j] == 'd'){
 						delay();
@@ -84,17 +78,18 @@ void CharToMcode(void)
 			}
 		}
 
-		data = cbuffer_dequeue(&mcode);
-	}
+		//data = cbuffer_dequeue(&mcode);
+	//}
 
 	if(CnvFlag)
 		printf("\n\rInvalid Input\n\r");
 
+	return output;
 	//NVIC_EnableIRQ(UART0_IRQn);
 
 }
 
-void TapToChar(char* TapCode)
+char TapToChar(char* TapCode)
 {
 	//NVIC_DisableIRQ(PORTD_IRQn);
 
@@ -112,32 +107,37 @@ void TapToChar(char* TapCode)
 				}
 			}
 			if((*(MorseCode[i].Mcode + j)=='\n') && (q==0)){
-				printf("%c\n\r",MorseCode[i].character);
-				break;
+				//printf("%c\n\r",MorseCode[i].character);
+				return MorseCode[i].character;
 			}
 	}
 
 	//NVIC_EnableIRQ(PORTD_IRQn);
-
+	return 0;
 }
 
-int main(void) {
-
-  	/* Init board hardware. */
-    BOARD_InitBootPins();
-    BOARD_InitBootClocks();
-    BOARD_InitBootPeripherals();
-
-   	 //Initializing the UART0 with baud rate 38400, Data size 8, Parity None and  2 Stop bits
+void Init_MorseCodeInterpreter(void)
+{
     INIT_SysTick();
     InitUart();
 	INIT_GPIO();
 	ledInit();
 	INIT_RGB_LED_PWM();
+}
+
+int MorseCodeInterpreter(void) {
+
+   	 //Initializing the UART0 with baud rate 38400, Data size 8, Parity None and  2 Stop bits
+//    INIT_SysTick();
+//    InitUart();
+//	INIT_GPIO();
+//	ledInit();
+//	INIT_RGB_LED_PWM();
 	printf("\n\rWelcome to the Morse code Interpreter!\n\r");
 
 	int duration;
 	int valid=0;
+	uart_input();
 
     while(1) {
     	valid=1;
@@ -215,7 +215,7 @@ int main(void) {
         		}
         		TapCode[i]='\n';
         		//printf("%s\n\r",TapCode);
-        		TapToChar(TapCode);
+        		printf("%c\n\r",TapToChar(TapCode));
         		NVIC_EnableIRQ(PORTD_IRQn);
 
         	}
@@ -232,14 +232,20 @@ int main(void) {
     		printf("%c",data);
     		while(data != 0x0d){
     			cbuffer_enqueue(&mcode,data);
+
     			data=getchar();
     			printf("%c",data);
     		}
 
     		printf("\n\r");
     		cbuffer_enqueue(&mcode,'|');
+    		//uint8_t data;
+    		data = cbuffer_dequeue(&mcode);
+    		while(data != '|'){
+    			CharToMcode(data);
+    			data=cbuffer_dequeue(&mcode);
+    		}
 
-    		CharToMcode();
     		uart_input();
 
     		enable_gpio();
