@@ -12,13 +12,9 @@
 #include "led.h"
 #include "tpm.h"
 
-#define RED		(0x00FF0000)
-#define GREEN	(0x0000FF00)
-#define BLUE	(0x000000FF)
-#define YELLOW  (0x00FFFF00)
-#define PURPLE  (0x00800080)
 
 cbuffer mcode;
+
 
 typedef struct{
 	char *Mcode;
