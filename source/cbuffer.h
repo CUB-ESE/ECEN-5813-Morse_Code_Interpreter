@@ -1,10 +1,10 @@
 /*
- * @file: cbuffer.h
+ *  @file       : cbuffer.h
  *
- * @description: includes function prototypes for circular buffer
+ *  @description: includes the APIs required for the circular buffer
  *
- *  Created on: December, 2021
- *  Author    : Santhosh, santhosh@colorado.edu
+ *  Created on  : December 1, 2021
+ *  Author      : Santhosh, santhosh@colorado.edu
  */
 
 #ifndef CBUFFER_H_
@@ -35,7 +35,7 @@ typedef struct{
  * Returns
  * 		length of the buffer
  */
-uint16_t cbuffer_length(cbuffer *buff);
+extern uint16_t cbuffer_length(cbuffer *buff);
 
 /*
  * @function: cbuffer_enqueue()
@@ -48,7 +48,7 @@ uint16_t cbuffer_length(cbuffer *buff);
  * Returns
  * 		0 if buffer is full, else returns the length of the buffer
  */
-uint8_t cbuffer_enqueue(cbuffer *buff, uint8_t d);
+extern uint8_t cbuffer_enqueue(cbuffer *buff, uint8_t d);
 
 /*
  * @function: cbuffer_dequeue()
@@ -61,7 +61,7 @@ uint8_t cbuffer_enqueue(cbuffer *buff, uint8_t d);
  * Returns
  * 		-1 if buffer is empty, else returns a byte of data
  */
-int cbuffer_dequeue(cbuffer *buff);
+extern int cbuffer_dequeue(cbuffer *buff);
 
 /*
  * @function: IsBuffFull()
@@ -74,7 +74,7 @@ int cbuffer_dequeue(cbuffer *buff);
  * Returns
  * 		0 if not full, 1 if buffer is full
  */
-int IsBuffFull(cbuffer *buff);
+extern int IsBuffFull(cbuffer *buff);
 
 
 /*
@@ -88,7 +88,7 @@ int IsBuffFull(cbuffer *buff);
  * Returns
  * 		0 if not empty, 1 if buffer is empty
  */
-int IsBuffEmpty(cbuffer *buff);
+extern int IsBuffEmpty(cbuffer *buff);
 
 
 /*
@@ -102,6 +102,6 @@ int IsBuffEmpty(cbuffer *buff);
  * Returns
  * 		capacity of the buffer (Full size)
  */
-int cbuffer_capacity(void);
+extern int cbuffer_capacity(void);
 
 #endif /* CBUFFER_H_ */

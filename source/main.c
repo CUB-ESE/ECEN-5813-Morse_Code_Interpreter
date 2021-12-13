@@ -1,19 +1,27 @@
 /*
- * main.c
+ *  @file		: main.c
  *
- *  Created on: Dec 7, 2021
- *      Author: ajsan
+ *  @description: implements the Morse code interpreter sequence and executes the both way conversions
+ *
+ *  Created on	: December 1, 2021
+ *  Author    	: Santhosh, santhosh@colorado.edu
  */
 
+
+//Headers
 #include "MorseCodeInterpreter.h"
 #include "test_interpreter.h"
-
 #include "cbuffer.h"
 #include "uart.h"
 #include "gpio.h"
 #include "systick.h"
 #include "led.h"
 #include "tpm.h"
+
+#include <ctype.h>
+
+#define ENTER_KEY  (0x0d)
+#define BACK_SPACE (0x7F)
 
 int main()
 {
@@ -24,9 +32,13 @@ int main()
     BOARD_InitBootPeripherals();
 
     Init_MorseCodeInterpreter();
+#ifdef DEBUG
+    printf("\n\rMorsecode Interpreter uCUnit tests.\n\r");
+    MorseCodeIntUnitTest();
+#endif
 
-//    printf("\n\rMorsecode Interpreter uCUnit tests.\n\r");
-//    MorseCodeIntUnitTest();
+    Boot_Sequence();
+
 	printf("\n\rWelcome to the Morse code Interpreter!\n\r");
 
 	int duration;
@@ -35,30 +47,27 @@ int main()
 
     while(1) {
     	valid=1;
-    	//printf("%X\n\r", PTD->PDIR);
 
+    	//If push botton input is detected
     	if(button_status()==1){
 
-    		disable_uart();
-
+    		disable_uart();				//disable UART till the read from button ends
     		reset_timer();
     		button_StatusReset(0);
-    		delay();
-    		if(PTD->PDIR == 0x40){
-    			button_StatusReset(0);
+    		delay();					//delay to avoid switch debouncing
 
-    		}else{
+    		if(PTD->PDIR == 0x40)		//checks again for the valid input
+    			button_StatusReset(0);	//resets the button press status
 
-    			greenLedOn();//
+    		else{
+    			//measure the tap duartion
     			RGB_LED_ON(GREEN);
 				while(button_status()!=1);
 				LedOff();
 				duration = get_timer();
-				if(duration<=5){
-					//greenLedOff();//
-	    			//redLedOn();//
 
-					//printf(". ");
+				//recognize the DOT
+				if(duration<=5){
 					cbuffer_enqueue(&mcode,'d');
 					delay();
 					RGB_LED_ON(RED);
@@ -66,17 +75,15 @@ int main()
 	    			LedOff();
 
 				}
+				//recognize the DASH
 				else if(duration>5 && duration<=14){
-					//greenLedOff();//
-	    			//blueLedOn();//
 	    			delay();
 					RGB_LED_ON(BLUE);
 	    			delay();
 	    			LedOff();
-					//printf("- ");
 					cbuffer_enqueue(&mcode,'D');
-
 				}
+
 				else{
 					printf("\n\rInvalid Input\n\r");
 	    			valid=0;
@@ -85,20 +92,21 @@ int main()
 	    			delay();
 	    			LedOff();
 				}
-				button_StatusReset(0);
 
+				button_StatusReset(0);
     		}
 
+    		//waits for the next tap or to consider for end of the character input
         	duration=now();
         	while((now()-duration)<=8 && button_status() != 1 && valid==1);
+
+        	//If end of character detected
         	if((now()-duration)>8){
     			delay();
 				RGB_LED_ON(YELLOW);
     			delay();
     			LedOff();
-        		//printf("\n\rEnd of Character\n\r");
         		NVIC_DisableIRQ(PORTD_IRQn);
-
         		cbuffer_enqueue(&mcode,'|');
         		char data = cbuffer_dequeue(&mcode);
         		char TapCode[100];
@@ -108,46 +116,47 @@ int main()
         			data = cbuffer_dequeue(&mcode);
         		}
         		TapCode[i]='\n';
-        		//printf("%s\n\r",TapCode);
-        		printf("%c\n\r",TapToChar(TapCode));
+        		char character = TapToChar(TapCode);
+        		if(character == 0 )
+        			printf("Invalid Input\n\r");
+        		else
+        			printf("%c\n\r",TapToChar(TapCode));
         		NVIC_EnableIRQ(PORTD_IRQn);
-
         	}
 
-        	enable_uart();
+        	enable_uart();								//enable UART back
 
     	}//if button_pressed
 
-    	//uart
+    	//If input is detected from the UART terminla
     	if (uart_input() ==1){
-    		disable_gpio();
+    		disable_gpio();								//disable GPIO
     		uint8_t data;
     		data=getchar();
     		printf("%c",data);
-    		while(data != 0x0d){
-    			cbuffer_enqueue(&mcode,data);
-
+    		while(data != ENTER_KEY){
+    			if(data == BACK_SPACE)
+    				cbuffer_dequeue(&mcode);
+    			else
+    				cbuffer_enqueue(&mcode,data);
+    			delay();
     			data=getchar();
     			printf("%c",data);
     		}
-
     		printf("\n\r");
     		cbuffer_enqueue(&mcode,'|');
-    		//uint8_t data;
-    		data = cbuffer_dequeue(&mcode);
+
+    		//Conversion to Morse code
+    		data = toupper(cbuffer_dequeue(&mcode));
     		while(data != '|'){
     			CharToMcode(data);
-    			data=cbuffer_dequeue(&mcode);
+    			data=toupper(cbuffer_dequeue(&mcode));
     		}
 
     		uart_input();
-
-    		enable_gpio();
+    		enable_gpio();									//Enable GPIO and reset all status values to 0;
     		button_StatusReset(0);
     	}//if UART Rx
-
-
-
 
     }//while
     return 0 ;

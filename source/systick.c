@@ -1,3 +1,11 @@
+/*
+ *  @file		: systick.c
+ *
+ *  @description: includes the APIs required for timing control
+ *
+ *  Created on	: December 1, 2021
+ *  Author    	: Santhosh, santhosh@colorado.edu
+ */
 
 #include "systick.h"
 
@@ -10,15 +18,18 @@ ticktime_t resetTime;
 void INIT_SysTick(void)
 {
 
-		SysTick->LOAD = (48000000L/16);			//counter value
-		NVIC_SetPriority(SysTick_IRQn,3);		//Setting Interrupt prioriy
-		SysTick->VAL = 0;				//force loading the reload value to be zero initially
-		SysTick->CTRL=  SysTick_CTRL_CLKSOURCE_Msk  	//selecting 48MHz clock source
-				| SysTick_CTRL_TICKINT_Msk 	//Enable Interrupts
-				| SysTick_CTRL_ENABLE_Msk ;	//Enable the SysTick Timer
+		SysTick->LOAD = (48000000L/16);				//counter value
+		NVIC_SetPriority(SysTick_IRQn,3);			//Setting Interrupt prioriy
+		SysTick->VAL = 0;							//force loading the reload value to be zero initially
+		SysTick->CTRL=  SysTick_CTRL_CLKSOURCE_Msk  //selecting 48MHz clock source
+						| SysTick_CTRL_TICKINT_Msk 	//Enable Interrupts
+						| SysTick_CTRL_ENABLE_Msk ;	//Enable the SysTick Timer
 
 }
 
+/*
+ * Increments the tick counters
+ */
 void SysTick_Handler()
 {
 		currentTime++;		//increments the tick counter in ISR

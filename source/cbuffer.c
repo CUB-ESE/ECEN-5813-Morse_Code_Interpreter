@@ -1,15 +1,15 @@
 /*
- * @file: uart.c
+ *  @file       : cbuffer.c
  *
- * @description: includes definition of function prototypes in cbuffer.h
+ *  @description: includes the APIs required for circular buffer
  *
- *  Created on: December 1, 2021
- *  Author    : Santhosh, santhosh@colorado.edu
+ *  Created on  : December 1, 2021
+ *  Author      : Santhosh, santhosh@colorado.edu
  */
 
 #include "cbuffer.h"
 
-//Refer header file for functions description
+//Refer header file for functions documentation
 
 int cbuffer_capacity(void)
 {

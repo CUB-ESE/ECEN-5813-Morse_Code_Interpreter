@@ -1,59 +1,53 @@
 /*
- * led.h
+ *  @file		: led.h
  *
- *  Created on: Dec 1, 2021
- *      Author: ajsan
+ *  @description: includes the APIs required for the RGB LED control
+ *
+ *  Created on	: December 1, 2021
+ *  Author    	: Santhosh, santhosh@colorado.edu
  */
 
 #ifndef LED_H_
 #define LED_H_
 
 /*
- * Initializes the RGB led by setting associated ports as GPIO and direction
+ * @function: ledInit()
+ *
+ * Initializes RGB led's by setting clock to the port and making them as GPIO along
+ * with setting their alternate function for TPM2 and/or TPM0
+ *
+ * Parameters:
+ * 		None
+ *
+ * Returns:
+ * 		None
  */
 extern void ledInit();
 
 /*
- * Function to turn on red led
- */
-extern void redLedOn();
-
-/*
- * Function to turn off red led
- */
-extern void redLedOff();
-
-/*
- * Function to turn on green led
- */
-extern void greenLedOn();
-
-/*
- * Function to turn off green led
- */
-extern void greenLedOff();
-
-/*
- * Function to turn on blue led
- */
-extern void blueLedOn();
-
-/*
- * Function to turn off blue led
- */
-extern void blueLedOff();
-
-/*
- * Function to turn on white led
- */
-extern void whiteLedOn();
-
-/*
- * Function to turn off white led
+ * @function: LedOff()
+ *
+ * This function turns of the RGB led
+ *
+ * Parameters:
+ * 		None
+ *
+ * Returns:
+ * 		None
  */
 extern void LedOff();
 
-
+/*
+ * @function: ledInit()
+ *
+ * Turns on the RGB led to given color
+ *
+ * Parameters:
+ * 		color <- 32-bit color code
+ *
+ * Returns:
+ * 		None
+ */
 extern void RGB_LED_ON(uint32_t color);
 
 #endif /* LED_H_ */

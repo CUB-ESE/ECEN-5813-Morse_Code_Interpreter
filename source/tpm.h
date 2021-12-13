@@ -1,8 +1,10 @@
 /*
- * tpm.h
+ *  @file		: tpm.h
  *
- *  Created on: Dec 6, 2021
- *      Author: ajsan
+ *  @description: includes the APIs required to initialize TPM2 and TPM0
+ *
+ *  Created on	: December 1, 2021
+ *  Author    	: Santhosh, santhosh@colorado.edu
  */
 
 #ifndef TPM_H_
@@ -18,13 +20,13 @@
 
 
 /*
- * Initializes the TSI register to work in poll-in mode
+ * Initializes the RGB led to PWM mode using TPM2 and TPM0
  *
  * Parameters:
- * 	None
+ * 		None
  *
  * Returns:
- * 	None
+ * 		None
  *
  */
 extern void INIT_RGB_LED_PWM(void);

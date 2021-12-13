@@ -1,8 +1,10 @@
 /*
- * gpio.h
+ *  @file		: gpio.h
  *
- *  Created on: Dec 1, 2021
- *      Author: ajsan
+ *  @description: includes the APIs required for the general purpose input/output
+ *
+ *  Created on	: December 1, 2021
+ *  Author    	: Santhosh, santhosh@colorado.edu
  */
 
 #ifndef GPIO_H_
@@ -23,12 +25,12 @@
  * 	None
  *
  */
-void INIT_GPIO(void);
+extern void INIT_GPIO(void);
 
 /*
  * @function: PORTD_IRQHandler()
  *
- * Initializes the GPIO ports
+ * PORTD Interrupt Service Routine
  *
  * Parameters:
  * 	None
@@ -37,14 +39,62 @@ void INIT_GPIO(void);
  * 	None
  *
  */
-void PORTD_IRQHandler();
+extern void PORTD_IRQHandler();
 
-int button_status(void);
+/*
+ * @function: button_status()
+ *
+ * Returns the input GPIO button status
+ *
+ * Parameters:
+ * 	None
+ *
+ * Returns:
+ * 	(int) buttonStatus value
+ *
+ */
+extern int button_status(void);
 
-void button_StatusReset(int);
+/*
+ * @function: button_StatusReset()
+ *
+ * Resets the buttonStatus value to given value
+ *
+ * Parameters:
+ * 	(int) reset value - ideally zero
+ *
+ * Returns:
+ * 	None
+ *
+ */
+extern void button_StatusReset(int);
 
-void disable_gpio(void);
+/*
+ * @function: disable_gpio()
+ *
+ * Disables the GPIO interrupt
+ *
+ * Parameters:
+ * 	None
+ *
+ * Returns:
+ * 	None
+ *
+ */
+extern void disable_gpio(void);
 
-void enable_gpio(void);
+/*
+ * @function: enable_gpio()
+ *
+ * Enables the GPIO interrupt
+ *
+ * Parameters:
+ * 	None
+ *
+ * Returns:
+ * 	None
+ *
+ */
+extern void enable_gpio(void);
 
 #endif /* GPIO_H_ */

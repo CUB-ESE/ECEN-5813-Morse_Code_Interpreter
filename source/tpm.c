@@ -1,8 +1,10 @@
 /*
- * tpm.c
+ *  @file		: tpm.c
  *
- *  Created on: Dec 6, 2021
- *      Author: ajsan
+ *  @description: includes the APIs required to initialize TPM2 and TPM0
+ *
+ *  Created on	: December 1, 2021
+ *  Author    	: Santhosh, santhosh@colorado.edu
  */
 
 
