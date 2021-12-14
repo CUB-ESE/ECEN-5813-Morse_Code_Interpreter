@@ -1,0 +1,9 @@
+core_cm0plus.h:745:22:NVIC_EnableIRQ	16	static
+core_cm0plus.h:756:22:NVIC_DisableIRQ	16	static
+core_cm0plus.h:804:22:NVIC_SetPriority	24	static
+gpio.c:19:6:INIT_GPIO	8	static
+gpio.c:33:6:PORTD_IRQHandler	8	static
+gpio.c:47:5:button_status	8	static
+gpio.c:52:6:button_StatusReset	16	static
+gpio.c:58:6:disable_gpio	8	static
+gpio.c:63:6:enable_gpio	8	static

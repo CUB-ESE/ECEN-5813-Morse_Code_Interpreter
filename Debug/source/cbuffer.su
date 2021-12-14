@@ -1,0 +1,6 @@
+cbuffer.c:14:5:cbuffer_capacity	8	static
+cbuffer.c:19:5:IsBuffFull	24	static
+cbuffer.c:27:5:IsBuffEmpty	16	static
+cbuffer.c:34:10:cbuffer_length	16	static
+cbuffer.c:39:9:cbuffer_enqueue	32	static
+cbuffer.c:56:5:cbuffer_dequeue	32	static
