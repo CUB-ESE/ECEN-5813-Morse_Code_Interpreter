@@ -1,0 +1,5 @@
+MorseCodeInterpreter.c:44:6:delay	8	static
+MorseCodeInterpreter.c:49:7:CharToMcode	32	static
+MorseCodeInterpreter.c:83:6:TapToChar	20	static
+MorseCodeInterpreter.c:107:6:Init_MorseCodeInterpreter	8	static
+MorseCodeInterpreter.c:116:6:Boot_Sequence	16	static

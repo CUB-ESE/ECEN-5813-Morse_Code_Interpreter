@@ -1,0 +1,6 @@
+gpio.c:19:6:INIT_GPIO	8	static
+gpio.c:33:6:PORTD_IRQHandler	0	static
+gpio.c:47:5:button_status	0	static
+gpio.c:52:6:button_StatusReset	0	static
+gpio.c:58:6:disable_gpio	0	static
+gpio.c:63:6:enable_gpio	0	static
