@@ -21,6 +21,8 @@ https://drive.google.com/file/d/1LgoO2Ni2UW6Yw-ez4Pn-ZqQDV5Ggl0y8/view?usp=shari
 Video Description: Video includes the program running in release mode. First it displays the intialization sequence by displaying Morse code for the characters from A - F.
 Then it includes the converion of Morse code from the button to character and Character to Morse code.
 
+In Character to Code convertion, the interpreter goes on converting each character of the string. When a invalid character is detected, it displays Invalid and continues with the string.
+
 # TESTING
 
 Below screenshots shows the testing techniques and sequence, which basically includes uCUnit test to check the Converion modules and some asserting to test other functinality.
