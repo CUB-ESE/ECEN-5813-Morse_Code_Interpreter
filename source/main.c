@@ -18,8 +18,6 @@
 #include "led.h"
 #include "tpm.h"
 
-#include <ctype.h>
-
 #define ENTER_KEY  (0x0d)
 #define BACK_SPACE (0x7F)
 
@@ -27,7 +25,8 @@ int main()
 {
 
   	/* Init board hardware. */
-    BOARD_InitBootPins();
+
+j	BOARD_InitBootPins();
     BOARD_InitBootClocks();
     BOARD_InitBootPeripherals();
 
@@ -120,7 +119,7 @@ int main()
         		if(character == 0 )
         			printf("Invalid Input\n\r");
         		else
-        			printf("%c\n\r",TapToChar(TapCode));
+        			printf("Character detected: %c\n\r",TapToChar(TapCode));
         		NVIC_EnableIRQ(PORTD_IRQn);
         	}
 
@@ -133,7 +132,7 @@ int main()
     		disable_gpio();								//disable GPIO
     		uint8_t data;
     		data=getchar();
-    		printf("%c",data);
+    		printf("UART Input: %c",data);
     		while(data != ENTER_KEY){
     			if(data == BACK_SPACE)
     				cbuffer_dequeue(&mcode);
@@ -147,10 +146,11 @@ int main()
     		cbuffer_enqueue(&mcode,'|');
 
     		//Conversion to Morse code
-    		data = toupper(cbuffer_dequeue(&mcode));
+    		data = cbuffer_dequeue(&mcode);
     		while(data != '|'){
-    			CharToMcode(data);
-    			data=toupper(cbuffer_dequeue(&mcode));
+    			if(CharToMcode(data) == NULL)
+    				printf("Invalid Input\n\r");
+    			data=cbuffer_dequeue(&mcode);
     		}
 
     		uart_input();

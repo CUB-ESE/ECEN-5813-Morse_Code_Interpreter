@@ -1,8 +1,10 @@
 /*
- * test_interpreter.h
+ *  @file		: test_interpreter.h
  *
- *  Created on: Dec 7, 2021
- *      Author: ajsan
+ *  @description: includes the APIs required for executing the test suite of Morse code interpreter
+ *
+ *  Created on	: December 1, 2021
+ *  Author    	: Santhosh, santhosh@colorado.edu
  */
 
 #ifndef TEST_INTERPRETER_H_
@@ -10,6 +12,17 @@
 
 #include "MorseCodeInterpreter.h"
 
+/*
+ * @function: MorseCodeIntUnitTest()
+ *
+ * @description: tests the MorseCodeInterpreter modules
+ *
+ * Parameter
+ * 		None
+ *
+ * Returns
+ * 		None
+ */
 void MorseCodeIntUnitTest(void);
 
 

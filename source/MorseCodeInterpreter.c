@@ -16,6 +16,8 @@
 #include "led.h"
 #include "tpm.h"
 
+#include <ctype.h>
+
 //circular buffer to store morse code inputs
 cbuffer mcode;
 
@@ -46,10 +48,8 @@ void delay(void){
 
 char* CharToMcode(char data)
 {
-		uint8_t CnvFlag;		// Flag to check the match found
 		char *output=NULL;
-		CnvFlag=1;
-
+		data = toupper(data);
 		//Search for the match from the look-up table, if found displays using RGB LED and clears the CnvFlag
 		for(int i=0;i<NCodes;i++){
 			if(data == MorseCode[i].character){
@@ -74,20 +74,14 @@ char* CharToMcode(char data)
 				RGB_LED_ON(BLUE);			//To indicate end of character
 				delay();
 				LedOff();
-				CnvFlag=0;
 			}
 		}
-
-	//If match not found
-	if(CnvFlag)
-		printf("\n\rInvalid Input\n\r");
 
 	return output;
 }
 
 char TapToChar(char* TapCode)
 {
-
 		int q=0;
 		int j=0;
 
@@ -102,6 +96,7 @@ char TapToChar(char* TapCode)
 					break;
 				}
 			}
+
 			if((*(MorseCode[i].Mcode + j)=='\n') && (q==0))
 				return MorseCode[i].character;
 		}
